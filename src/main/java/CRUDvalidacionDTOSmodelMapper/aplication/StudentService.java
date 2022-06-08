@@ -2,8 +2,10 @@ package CRUDvalidacionDTOSmodelMapper.aplication;
 
 import CRUDvalidacionDTOSmodelMapper.domain.person.Person;
 import CRUDvalidacionDTOSmodelMapper.domain.student.Student;
-import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.input.StudentInputDTO;
-import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.output.StudentOutputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.inputs.StudentInputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.outputs.StudentOutputs.StudenOutputsDTOComplex;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.outputs.StudentOutputs.StudentOutputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.outputs.StudentOutputs.StudentOutputDTOSimple;
 import CRUDvalidacionDTOSmodelMapper.insfrastructure.exceptions.NotFoundException;
 import CRUDvalidacionDTOSmodelMapper.insfrastructure.repository.PersonRepository;
 import CRUDvalidacionDTOSmodelMapper.insfrastructure.repository.StudentRepository;
@@ -31,27 +33,28 @@ public class StudentService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public ResponseEntity<StudentOutputDTO> addStudent(StudentInputDTO studentInputDTO) {
+    public ResponseEntity<StudentOutputDTOSimple> addStudent(StudentInputDTO studentInputDTO) {
 
         Optional<Person> personInDB = personRepository.findById(studentInputDTO.getId_person());
 
-        if (personInDB.isPresent()){
+        if (personInDB.isPresent()) {
 
             Student studentEntity = modelMapper.map(studentInputDTO, Student.class);
+
+            studentEntity.setId_person(personInDB.get());
+
             studentRepository.saveAndFlush(studentEntity);
 
             studentInputDTO.setId_student(studentEntity.getId_student());
-            StudentOutputDTO studentOutputDTO = modelMapper.map(studentInputDTO, StudentOutputDTO.class);
 
-            studentOutputDTO.setId_person(personInDB.get());
+            StudentOutputDTOSimple studentOutputDTOSimple = modelMapper.map(studentInputDTO, StudentOutputDTOSimple.class);
 
-            return new ResponseEntity<>(studentOutputDTO, HttpStatus.CREATED);
+            return new ResponseEntity<>(studentOutputDTOSimple, HttpStatus.CREATED);
 
-        }  else {
+        } else {
 
-            throw new NotFoundException("The person does not exist");
+            throw new NotFoundException("the person with id: " + studentInputDTO.getId_person() + " does not exist");
         }
-
     }
 
     public ResponseEntity<List<StudentOutputDTO>> getAllStudents() {
@@ -72,25 +75,34 @@ public class StudentService {
         return new ResponseEntity<>(studentsOutputDTOList, HttpStatus.OK);
     }
 
-    public ResponseEntity<StudentOutputDTO> getStudentById(String id, String outputType) {
-
+    public ResponseEntity<Object> getStudentById(String id, String outputType) {
 
         Optional<Student> studentEntity = studentRepository.findById(id);
 
         if (studentEntity.isPresent()) {
 
-            StudentOutputDTO studentOutputDTO = modelMapper.map(studentEntity, StudentOutputDTO.class);
+            if (outputType.equalsIgnoreCase("full")) {
 
-            if(outputType.equalsIgnoreCase("simple")){
-                studentOutputDTO.setId_person(studentOutputDTO.getId_person());
+                StudenOutputsDTOComplex studenOutputsDTOComplex = new StudenOutputsDTOComplex(studentEntity.get());
+
+                return new ResponseEntity<>(studenOutputsDTOComplex, HttpStatus.OK);
+
+            } else if (outputType.equalsIgnoreCase("simple")){
+
+                ///// ----------------------- Also works with Constructor ---------------------- /////
+                //StudentOutputDTOSimple studentOutputDTOSimple = new StudentOutputDTOSimple(studentEntity.get());
+
+                StudentOutputDTOSimple studentOutputDTOSimple = modelMapper.map(studentEntity, StudentOutputDTOSimple.class);
+
+                return new ResponseEntity<>(studentOutputDTOSimple, HttpStatus.OK);
+
+            } else {
+                throw new NotFoundException("Please remove the outputType from the path, leave only the student id or put 'simple' or 'full' in the path.");
             }
-
-
-            return new ResponseEntity<>(studentOutputDTO, HttpStatus.OK);
 
         } else {
 
-            throw new NotFoundException("The student does not exist");
+            throw new NotFoundException("The student with id: " + id + "does not exist");
         }
 
     }
@@ -121,9 +133,8 @@ public class StudentService {
                     + studentToDelete.get().getId_student(), HttpStatus.OK);
         } else {
 
-            throw new NotFoundException("The student does not  exist");
+            throw new NotFoundException("The student with id: " + id + "does not exist");
         }
     }
-
 
 }

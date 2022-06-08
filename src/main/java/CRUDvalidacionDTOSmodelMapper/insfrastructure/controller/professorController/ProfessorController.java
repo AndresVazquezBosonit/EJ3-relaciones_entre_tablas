@@ -1,8 +1,8 @@
 package CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.professorController;
 
 import CRUDvalidacionDTOSmodelMapper.aplication.ProfessorService;
-import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.input.ProfessorInputDTO;
-import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.output.ProfessorOutputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.inputs.ProfessorInputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.outputs.ProfessorOutputs.ProfessorOutputDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

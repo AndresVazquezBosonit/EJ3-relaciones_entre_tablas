@@ -1,4 +1,4 @@
-package CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.output;
+package CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.outputs.StudentOutputs;
 
 import CRUDvalidacionDTOSmodelMapper.domain.person.Person;
 import CRUDvalidacionDTOSmodelMapper.domain.professor.Professor;
@@ -14,8 +14,6 @@ public class StudentOutputDTO {
     private int hours_per_week;
 
     private String comments;
-
-    private Professor id_professor;
 
     private String branch;
 

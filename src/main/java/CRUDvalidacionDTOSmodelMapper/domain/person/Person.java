@@ -1,6 +1,10 @@
 package CRUDvalidacionDTOSmodelMapper.domain.person;
 
+import CRUDvalidacionDTOSmodelMapper.domain.professor.Professor;
+import CRUDvalidacionDTOSmodelMapper.domain.student.Student;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -15,6 +19,8 @@ import java.util.Date;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "persons")
 public class Person {
 
@@ -73,5 +79,15 @@ public class Person {
     private String image_url;
 
     private Date termination_date;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_person")
+    private Professor id_professor;
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_person")
+    private Student id_student;
+
 
 }

@@ -1,7 +1,7 @@
 package CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.personController;
 
-import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.input.PersonInputDTO;
-import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.output.PersonOutputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.inputs.PersonInputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.outputs.PersonOutputs.PersonOutputDTO;
 import CRUDvalidacionDTOSmodelMapper.aplication.PersonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PersonOutputDTO> personById(@PathVariable String id) throws Exception {
+    public ResponseEntity<Object> personById(@PathVariable String id) throws Exception {
         return personService.personById(id);
     }
 

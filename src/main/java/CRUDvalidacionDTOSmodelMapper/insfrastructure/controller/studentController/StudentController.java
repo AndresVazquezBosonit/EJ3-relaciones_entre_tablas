@@ -1,8 +1,9 @@
 package CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.studentController;
 
 import CRUDvalidacionDTOSmodelMapper.aplication.StudentService;
-import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.input.StudentInputDTO;
-import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.output.StudentOutputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.inputs.StudentInputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.outputs.StudentOutputs.StudentOutputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.outputs.StudentOutputs.StudentOutputDTOSimple;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping
-    public ResponseEntity<StudentOutputDTO> addStudent(@RequestBody StudentInputDTO studentInputDTO) {
+    public ResponseEntity<StudentOutputDTOSimple> addStudent(@RequestBody StudentInputDTO studentInputDTO) {
 
         return studentService.addStudent(studentInputDTO);
     }
@@ -30,7 +31,7 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentOutputDTO> getStudentById(@PathVariable String id, @RequestParam(defaultValue = "simple")String outputType){
+    public ResponseEntity<Object> getStudentById(@PathVariable String id, @RequestParam(defaultValue = "simple")String outputType){
 
         return studentService.getStudentById(id, outputType);
     }

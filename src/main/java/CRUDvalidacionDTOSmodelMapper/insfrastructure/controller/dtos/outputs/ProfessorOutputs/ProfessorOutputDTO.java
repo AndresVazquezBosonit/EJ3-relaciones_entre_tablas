@@ -1,4 +1,4 @@
-package CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.output;
+package CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.outputs.ProfessorOutputs;
 
 import CRUDvalidacionDTOSmodelMapper.domain.person.Person;
 import lombok.Data;

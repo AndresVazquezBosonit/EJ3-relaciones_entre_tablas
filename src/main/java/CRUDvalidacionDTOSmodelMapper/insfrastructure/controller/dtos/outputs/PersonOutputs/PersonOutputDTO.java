@@ -1,5 +1,7 @@
-package CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.output;
+package CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.outputs.PersonOutputs;
 
+import CRUDvalidacionDTOSmodelMapper.domain.professor.Professor;
+import CRUDvalidacionDTOSmodelMapper.domain.student.Student;
 import lombok.Data;
 
 import java.util.Date;
@@ -18,4 +20,6 @@ public class PersonOutputDTO {
   private Date created_date;
   private String image_url;
   private Date termination_date;
+  private Professor professor;
+  private Student student;
 }

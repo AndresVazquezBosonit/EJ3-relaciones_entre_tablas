@@ -2,8 +2,8 @@ package CRUDvalidacionDTOSmodelMapper.aplication;
 
 import CRUDvalidacionDTOSmodelMapper.domain.person.Person;
 import CRUDvalidacionDTOSmodelMapper.domain.professor.Professor;
-import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.input.ProfessorInputDTO;
-import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.output.ProfessorOutputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.inputs.ProfessorInputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.outputs.ProfessorOutputs.ProfessorOutputDTO;
 import CRUDvalidacionDTOSmodelMapper.insfrastructure.exceptions.NotFoundException;
 import CRUDvalidacionDTOSmodelMapper.insfrastructure.repository.PersonRepository;
 import CRUDvalidacionDTOSmodelMapper.insfrastructure.repository.ProfessorRepository;
@@ -33,19 +33,23 @@ public class ProfessorService {
 
         Optional<Person> personEntity = personRepository.findById(professorInputDTO.getId_person());
 
-        if(personEntity.isPresent()){
+        if (personEntity.isPresent()) {
 
             Professor professorEntity = modelMapper.map(professorInputDTO, Professor.class);
             professorRepository.save(professorEntity);
 
+            //personEntity.get().setId_professor(professorEntity);
+            //personRepository.saveAndFlush(personEntity.get());
+
             ProfessorOutputDTO professorOutputDTO = modelMapper.map(professorInputDTO, ProfessorOutputDTO.class);
             professorOutputDTO.setId_professor(professorEntity.getId_professor());
 
-            professorOutputDTO.setId_person(personEntity.get());
+            //professorOutputDTO.setId_person(personEntity.get());
 
             return new ResponseEntity<>(professorOutputDTO, HttpStatus.CREATED);
 
-        } else throw new NotFoundException("The Person does not exist");
+        } else
+            throw new NotFoundException("the person with id: " + professorInputDTO.getId_person() + " does not exist");
 
     }
 
@@ -75,7 +79,7 @@ public class ProfessorService {
 
         } else {
 
-            throw new NotFoundException("The professor does not exist");
+            throw new NotFoundException("The professor with id: " + id + " does not exist");
         }
     }
 
@@ -92,7 +96,7 @@ public class ProfessorService {
                     HttpStatus.OK);
         } else {
 
-            throw new NotFoundException("the professor does not exist");
+            throw new NotFoundException("the professor with id: " + id + " does not exist");
         }
 
     }
@@ -119,7 +123,7 @@ public class ProfessorService {
 
         } else {
 
-            throw new NotFoundException("The Professor does not exist");
+            throw new NotFoundException("the professor with id: " + id + " that you are trying to update does not exist");
         }
     }
 

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -24,30 +25,29 @@ public class Student {
             name = "students_sequence",
             strategy = "CRUDvalidacionDTOSmodelMapper.domain.person.PersonsSequenceIdGenerator",
             parameters = {
-                    @org.hibernate.annotations.Parameter(name = PersonsSequenceIdGenerator.INCREMENT_PARAM, value = "1"),
-                    @org.hibernate.annotations.Parameter(name = PersonsSequenceIdGenerator.VALUE_PREFIX_PARAMETER, value = "STU"),
-                    @org.hibernate.annotations.Parameter(name = PersonsSequenceIdGenerator.NUMBER_FORMAT_PARAMETER, value = "%05d")
+                    @Parameter(name = PersonsSequenceIdGenerator.INCREMENT_PARAM, value = "1"),
+                    @Parameter(name = PersonsSequenceIdGenerator.VALUE_PREFIX_PARAMETER, value = "STU"),
+                    @Parameter(name = PersonsSequenceIdGenerator.NUMBER_FORMAT_PARAMETER, value = "%05d")
             }
     )
     @Column(name = "id_student", nullable = false)
     private String id_student;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "id_person")
-    @NotBlank
     private Person id_person;
 
-    @Column(name = "hours_per_week")
+   // @Column(name = "hours_per_week")
     private int hours_per_week;
 
-    @Column(name = "comments")
+    //@Column(name = "comments")
     private String comments;
 
-    @NotBlank
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_professor")
     private Professor id_professor;
 
-    @Column(name = "branch")
+    //@Column(name = "branch")
     String branch;
 
 }

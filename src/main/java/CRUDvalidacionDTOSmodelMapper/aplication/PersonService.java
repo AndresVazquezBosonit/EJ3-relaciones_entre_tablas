@@ -1,8 +1,10 @@
 package CRUDvalidacionDTOSmodelMapper.aplication;
 
 import CRUDvalidacionDTOSmodelMapper.domain.person.Person;
-import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.input.PersonInputDTO;
-import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.output.PersonOutputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.inputs.PersonInputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.outputs.PersonOutputs.PersonOutputDTO;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.outputs.PersonOutputs.PersonOutputDTOProfessor;
+import CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.outputs.PersonOutputs.PersonOutputDTOStudent;
 import CRUDvalidacionDTOSmodelMapper.insfrastructure.exceptions.NotFoundException;
 import CRUDvalidacionDTOSmodelMapper.insfrastructure.repository.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +31,7 @@ public class PersonService {
 
 
     ///// ----------------------- Add new Person -----------------------/////
-    public ResponseEntity<PersonOutputDTO> addPerson(PersonInputDTO personInputDTO) throws ParseException {
+    public ResponseEntity<PersonOutputDTO> addPerson(PersonInputDTO personInputDTO) {
 
         LocalDate creationDate = LocalDate.now();
 
@@ -60,13 +62,16 @@ public class PersonService {
     }
 
     ///// ---------------------------- Find Person By Id ------------------------/////
-    public ResponseEntity<PersonOutputDTO> personById(String id) throws Exception {
+    public ResponseEntity<Object> personById(String id) throws Exception {
 
         Optional<Person> personInBD = personRepository.findById(id);
+
+        log.warn(personInBD.toString());
 
         HttpHeaders httpHeaders = new HttpHeaders();
 
         if (personInBD.isPresent()) {
+
 
             PersonOutputDTO personOutputDTO = new PersonOutputDTO();
             personOutputDTO = modelMapper.map(personInBD, PersonOutputDTO.class);
@@ -74,10 +79,35 @@ public class PersonService {
             httpHeaders.add("Message", "User exist");
 
             return new ResponseEntity<>(personOutputDTO, httpHeaders, HttpStatus.OK);
+/*
+            if(personInBD.get().getId_professor() != null) {
+                log.warn("Entro en condicional de profesor");
+
+                PersonOutputDTOProfessor personOutputDTOProfessor = modelMapper.map(personInBD, PersonOutputDTOProfessor.class);
+                return new ResponseEntity<>(personOutputDTOProfessor,HttpStatus.OK);
+
+            } else if (personInBD.get().getId_student() != null ) {
+                log.warn("Entro en condicional de alumno");
+                PersonOutputDTOStudent personOutputDTOStudent = modelMapper.map(personInBD, PersonOutputDTOStudent.class);
+                return new ResponseEntity<>(personOutputDTOStudent, HttpStatus.OK);
+
+            } else {
+
+                log.warn("Voy directo a este else");
+
+                PersonOutputDTO personOutputDTO = new PersonOutputDTO();
+                personOutputDTO = modelMapper.map(personInBD, PersonOutputDTO.class);
+
+                httpHeaders.add("Message", "User exist");
+
+                return new ResponseEntity<>(personOutputDTO, httpHeaders, HttpStatus.OK);
+            }
+
+ */
 
         } else {
 
-            throw new NotFoundException("the person does not exist");
+            throw new NotFoundException("the person with id: " + id + " does not exist");
         }
     }
 
@@ -114,7 +144,7 @@ public class PersonService {
                     + personToDelete.get().getId_person(), HttpStatus.OK);
         } else {
 
-            throw new NotFoundException("the person does not exist");
+            throw new NotFoundException("the person with id: " + id + "does not exist");
         }
     }
 
@@ -155,7 +185,7 @@ public class PersonService {
 
         } else {
 
-            throw new NotFoundException("the person does not exist");
+            throw new NotFoundException("the person with id: " + id + " that you are trying to update does not exist");
 
         }
     }

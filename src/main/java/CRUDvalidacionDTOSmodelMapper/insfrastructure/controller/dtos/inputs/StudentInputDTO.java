@@ -1,9 +1,9 @@
-package CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.input;
+package CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.inputs;
 
-import CRUDvalidacionDTOSmodelMapper.domain.professor.Professor;
+import CRUDvalidacionDTOSmodelMapper.domain.person.Person;
 import lombok.Data;
 
-import java.util.List;
+import javax.validation.constraints.NotBlank;
 
 @Data
 public class StudentInputDTO {

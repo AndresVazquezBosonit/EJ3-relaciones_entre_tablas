@@ -1,4 +1,4 @@
-package CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dto.input;
+package CRUDvalidacionDTOSmodelMapper.insfrastructure.controller.dtos.inputs;
 
 import lombok.Data;
 
